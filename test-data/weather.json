@@ -1,0 +1,20 @@
+{
+  "city": {
+    "name": "Warsaw",
+    "country_code": "PL",
+    "units": "metric",
+    "expected_coordinates": {
+      "lat": 52.23,
+      "lon": 21.01
+    },
+    "coordinates_tolerance": 0.5,
+    "temperature_range_celsius": {
+      "min": -60,
+      "max": 60
+    }
+  },
+  "unknown_city": {
+    "name": "NonExistingCityXyz123",
+    "expected_message": "city not found"
+  }
+}

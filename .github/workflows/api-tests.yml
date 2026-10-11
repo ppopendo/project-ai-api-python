@@ -1,0 +1,80 @@
+name: API tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: api-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint & format check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ruff lint
+        run: ruff check --output-format=github .
+
+      - name: Ruff format check
+        run: ruff format --check --diff .
+
+  api-tests:
+    name: API tests
+    needs: lint
+    runs-on: ubuntu-latest
+    env:
+      OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+      OPENWEATHER_BASE_URL: ${{ vars.OPENWEATHER_BASE_URL || 'https://api.openweathermap.org' }}
+      REQUEST_TIMEOUT: ${{ vars.REQUEST_TIMEOUT || '10' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Warn when API key secret is missing
+        if: env.OPENWEATHER_API_KEY == ''
+        run: >
+          echo "::warning title=Missing secret::OPENWEATHER_API_KEY is not set
+          (e.g. pull requests from forks) - API tests will be skipped."
+
+      - name: Run API tests
+        if: env.OPENWEATHER_API_KEY != ''
+        run: >
+          pytest
+          --junitxml=reports/junit.xml
+          --html=reports/report.html --self-contained-html
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: api-test-report
+          path: reports/
+          if-no-files-found: ignore

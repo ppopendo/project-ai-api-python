@@ -1,0 +1,58 @@
+[project]
+name = "project-ai-api-python"
+version = "1.0.0"
+description = "Szkoleniowe testy automatyczne API (CRUD) OpenWeatherMap w Pythonie z pytest."
+readme = "README.md"
+requires-python = ">=3.11"
+
+# ---------------------------------------------------------------------------
+# pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+    "test_id(id): unikalny identyfikator testu widoczny w raportach i logach (np. TC-STA-001).",
+    "health: testy dostępności usług (health checks).",
+    "stations: testy Weather Stations API (CRUD).",
+    "weather: testy Current Weather Data API.",
+]
+log_level = "INFO"
+log_format = "%(asctime)s %(levelname)-8s %(name)s: %(message)s"
+log_date_format = "%H:%M:%S"
+junit_family = "xunit2"
+
+# ---------------------------------------------------------------------------
+# ruff (lint + format)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle - błędy
+    "W",   # pycodestyle - ostrzeżenia
+    "F",   # pyflakes
+    "I",   # isort - kolejność importów
+    "N",   # pep8-naming - nazewnictwo
+    "D",   # pydocstyle - wymagane docstringi
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "PT",  # flake8-pytest-style
+]
+# Reguły niekompatybilne z formatowaniem wcięć tabulatorami (format.indent-style = "tab").
+ignore = [
+    "W191", # tab-indentation
+    "E101", # mixed-spaces-and-tabs
+    "D206", # docstring-tab-indentation
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "tab"

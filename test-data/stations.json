@@ -1,0 +1,17 @@
+{
+  "new_station": {
+    "external_id": "PL_TRAINING_WAW",
+    "name": "Training Station Warsaw",
+    "latitude": 52.23,
+    "longitude": 21.01,
+    "altitude": 110
+  },
+  "updated_station": {
+    "external_id": "PL_TRAINING_KRK",
+    "name": "Training Station Krakow (updated)",
+    "latitude": 50.06,
+    "longitude": 19.94,
+    "altitude": 220
+  },
+  "coordinates_tolerance": 0.0001
+}

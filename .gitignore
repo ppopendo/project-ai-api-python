@@ -1,0 +1,22 @@
+# Sekrety - NIGDY nie commitujemy
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Narzędzia
+.pytest_cache/
+.ruff_cache/
+
+# Raporty z testów
+reports/
+
+# IDE
+.idea/
+.vscode/
